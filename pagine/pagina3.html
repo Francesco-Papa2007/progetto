@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Documenti</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            background: #f7f7f7;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        form {
+            width: min(520px, 90%);
+            padding: 26px 28px;
+            border-radius: 16px;
+            background: rgb(229, 226, 226);
+            box-shadow: 0 12px 30px rgba(27, 64, 44, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 1.95rem;
+        }
+
+        div {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 1rem;
+            border: 1px solid #c1c1c1;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1.05rem;
+            border: none;
+            border-radius: 10px;
+            background: #0066cc;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0055a3;
+        }
+
+        .errore {
+            color: #b00020;
+            font-size: 0.92rem;
+            min-height: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Upload Documenti</h1>
+
+    <form>
+
+        <div>
+            <label>Curriculum PDF</label>
+            <input type="file" id="cv" accept="application/pdf">
+            <span class="errore" id="errCv"></span>
+        </div>
+
+        <div>
+            <label>Lettera di Presentazione (Opzionale)</label>
+            <input type="file" id="lettera" accept="application/pdf">
+            <span class="errore" id="errLettera"></span>
+        </div>
+
+        <button type="button" onclick="tornaIndietro()">
+            Indietro
+        </button>
+
+        <button type="button" onclick="validateForm()">
+            Avanti
+        </button>
+
+    </form>
+
+    <script>
+        const cvInput = document.getElementById('cv');
+        const letteraInput = document.getElementById('lettera');
+
+        if (cvInput) {
+            cvInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                    alert('Seleziona un file PDF valido per il CV');
+                    event.target.value = '';
+                } else {
+                    const e = document.getElementById('errCv');
+                    if (e) e.innerHTML = '';
+                }
+            });
+        }
+
+        if (letteraInput) {
+            letteraInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                    alert('Seleziona un file PDF valido per la lettera');
+                    event.target.value = '';
+                } else {
+                    const e = document.getElementById('errLettera');
+                    if (e) e.innerHTML = '';
+                }
+            });
+        }
+
+        function tornaIndietro() {
+            window.location.href = "pagina2.html";
+        }
+
+        function validateForm() {
+            var cvEl = document.getElementById("cv");
+            var letteraEl = document.getElementById("lettera");
+
+            var errCv = document.getElementById("errCv");
+            var errLettera = document.getElementById("errLettera");
+
+            var isValid = true;
+
+            if (!cvEl || cvEl.files.length === 0) {
+                if (errCv) errCv.innerHTML = "Carica il curriculum (PDF)";
+                isValid = false;
+            } else {
+                var file = cvEl.files[0];
+                if (!(file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))) {
+                    if (errCv) errCv.innerHTML = "Il curriculum deve essere un file PDF.";
+                    isValid = false;
+                } else {
+                    if (errCv) errCv.innerHTML = "";
+                }
+            }
+
+            // Lettera opzionale: se presente, deve essere PDF
+            if (letteraEl && letteraEl.files.length > 0) {
+                var f = letteraEl.files[0];
+                if (!(f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'))) {
+                    if (errLettera) errLettera.innerHTML = "La lettera deve essere un file PDF.";
+                    isValid = false;
+                } else {
+                    if (errLettera) errLettera.innerHTML = "";
+                }
+            } else {
+                if (errLettera) errLettera.innerHTML = "";
+            }
+
+            if (isValid) {
+                window.location.href = "pagina4.html";
+            }
+        }
+
+        function SalvaVariabili(documenti){
+            localStorage.setItem("documenti", JSON.stringify(documenti));
+        }
+
+    </script>
+
+</body>
+</html>
+
